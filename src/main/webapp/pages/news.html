@@ -42,14 +42,14 @@
                   <i class="glyphicon glyphicon-minus"></i>
                 </button>
             </div>
-            <table id="table" data-id-field="newsId" data-pagination="true"
+            <table id="table" data-id-field="objectId" data-pagination="true"
             data-toolbar="#toolbar" data-height="80%" data-show-refresh="true"
             data-show-columns="true" data-show-toggle="true"
             data-toolbar-align="right" data-click-to-select="true">
             <thead>
               <tr>
                 <th data-field="state" data-checkbox="true"></th>
-                <th data-align="left" data-field="newsId">新闻Id</th>
+                <th data-align="left" data-field="objectId">新闻Id</th>
                 <th data-align="left" data-field="title">标题</th>
                 <th data-align="left" data-field="imgUrl"
                 data-formatter="formatter">图片</th>
@@ -128,7 +128,7 @@
   var $title = $("#titleId");
 
   $table.bootstrapTable({
-    url : "../news/getPCAllNews.do?server=56846a8a2fee49d14901d39cc48b8b2a&campusId="+getCookie("campusId")
+    url : "../news/getPCAllNews.do?server=56846a8a2fee49d14901d39cc48b8b2a"
   });
     //隐藏的时候清除数据
     $("#myModal").on("hidden.bs.modal", function() {  
@@ -145,15 +145,15 @@
 
       $deleteButton.click(function() {
       var array = $table.bootstrapTable('getSelections'); //获取选中的所有记录
-      var newsIdString = "";
+      var objectIdString = "";
       if (array.length == 0)
         alert("请先选中要删除的记录！"); //选择记录不能为空
       else {
         for ( var i = array.length - 1; i >= 0; i--) {
           if (i == 0) {
-            newsIdString += array[i].newsId; //连接最末不加，号
+            objectIdString += array[i].objectId; //连接最末不加，号
           } else {
-            newsIdString += array[i].newsId + ","; //id用逗号连接
+            objectIdString += array[i].objectId + ","; //id用逗号连接
           }
         }
         ;
@@ -161,14 +161,13 @@
         if (confirm("是否确定要执行删除操作！")) {
           //做删除的访问请求
           $.post("../../foryou/news/deleteNews.do", {
-            campusId : getCookie("campusId"),
-            newsId : newsIdString,
+            objectId : objectIdString,
             server:"56846a8a2fee49d14901d39cc48b8b2a"
           }, function(text) {
             var json = eval('(' + text + ')');
             if (json.status == "success") {
               for (var i = array.length - 1; i >= 0; i--) {
-                                $('#table').bootstrapTable('remove', {field: 'newsId', values: [array[i].newsId]});
+                                $('#table').bootstrapTable('remove', {field: 'objectId', values: [array[i].objectId]});
                             };
             } else {
               alert(json.message);

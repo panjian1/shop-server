@@ -3,6 +3,9 @@ package com.changyu.foryou.serviceImpl;
 import java.util.List;
 import java.util.Map;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,21 +32,36 @@ public class NewsServiceImpl implements NewsService {
 		return newsMapper.getSmallNews(map);
 	}
 
-	public News getNewsById(Long newsId) {
-		return newsMapper.selectByPrimaryKey(newsId);
+	public News getNewsById(String newsId) {
+		AVQuery<News> query = AVObject.getQuery(News.class);
+		News  news = null;
+		try {
+			news = query.get(newsId);
+		} catch (AVException e) {
+			e.printStackTrace();
+		}
+		return news;
 	}
 
-	public List<News> getPcAllNews(Map<String, Object> requestMap) {
-		return newsMapper.getPcAllNews(requestMap);
+	public List<News> getPcAllNews() {
+		AVQuery<News> query = AVObject.getQuery(News.class);
+		List<News> result = null;
+		try {
+			 result = query.find();
+		} catch (AVException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
-	public Integer addNews(News news) {
-       return newsMapper.insert(news);		
+	public void addNews(News news) throws AVException{
+       news.save();
 	}
 
 	@Override
-	public int deleteById(String id) {
-		return newsMapper.deleteByPrimaryKey(Long.valueOf(id));
+	public void deleteById(String id) throws Exception{
+		// 执行 CQL 语句实现更新一个 Todo 对象
+		AVQuery.doCloudQuery("delete from news where objectId=?", id);
 	}
 
 	

@@ -1,6 +1,6 @@
 package com.changyu.foryou.model;
 
-public class ShortFood {
+public class ShortGood {
 	private Long foodId;
     private Integer campusId;
     

@@ -31,37 +31,32 @@ public class SellerController {
 	public void setSellerService(SellerService sellerService) {
 		this.sellerService = sellerService;
 	}
-	
-	
 
-	
-	
 	/**
 	 * 商家登录
-	 * @param campusAdmin
+	 * @param adminName
 	 * @param password
 	 * */
 	@RequestMapping("/toLogin")
 	public @ResponseBody Map<String, Object> toLogin(
-			@RequestParam String campusAdmin, @RequestParam String password,
+			@RequestParam String adminName, @RequestParam String password,
 			HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (campusAdmin != null && password != null
-				&& !campusAdmin.trim().equals("")
+		if (adminName != null && password != null
+				&& !adminName.trim().equals("")
 				&& !password.trim().equals("")) {
-			Sellers sellers = sellerService.selectByCampusAdmin(campusAdmin);
+			Sellers sellers = sellerService.selectByCampusAdmin(adminName);
 			if (sellers != null) {
 				if (sellers.getPassword().equals(Md5.GetMD5Code(password))) {
-				//if (sellers.getPassword().equals(password)) {
 					map.put(Constants.STATUS, Constants.SUCCESS);
 					map.put(Constants.MESSAGE, "登陆成功");
-					map.put("type", sellers.getType());
+					map.put("type", 0);
 					HttpSession session = request.getSession();
-					session.setAttribute("type", sellers.getType());
+					session.setAttribute("type", 0);
 					session.setAttribute("campusAdmin",
-							sellers.getCampusAdmin());
+							sellers.getAdminName());
 					Date date = new Date();
-					sellerService.updateLastLoginTime(date, campusAdmin);
+					sellerService.updateLastLoginTime(date, adminName);
 				} else {
 					map.put(Constants.STATUS, Constants.FAILURE);
 					map.put(Constants.MESSAGE, "账号或密码错误，请检查后输入");
@@ -118,13 +113,12 @@ public class SellerController {
 	 * 商家注册
 	 * @param campusAdmin
 	 * @param password
-	 * @param campusId
 	 * @return
 	 */
 	
 	@RequestMapping("/registerIn")
 	public @ResponseBody Map<String, Object> registerIn(
-			@RequestParam String campusAdmin, @RequestParam String password,@RequestParam Integer campusId)
+			@RequestParam String campusAdmin, @RequestParam String password)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -132,10 +126,9 @@ public class SellerController {
 			{
 				String passwordMd5 = Md5.GetMD5Code(password);
 				Sellers seller = new Sellers();
-				seller.setCampusAdmin(campusAdmin);
+				seller.setAdminName(campusAdmin);
 				seller.setPassword(passwordMd5);
-				seller.setCampusId(campusId);
-				sellerService.addASeller(seller);	
+				sellerService.addASeller(seller);
 				map.put(Constants.STATUS, Constants.SUCCESS);
 				map.put(Constants.MESSAGE, "注册成功");
 			    }				

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.avos.avoscloud.AVException;
 import com.changyu.foryou.model.Feedback;
 import com.changyu.foryou.model.Users;
 
@@ -11,7 +12,7 @@ import com.changyu.foryou.model.Users;
 public interface UserService {
 	Users selectByUsername(String id);//根据用户手机号获取用户信息
 
-	void addUsers(Users users);
+	void addUsers(Users users) throws AVException;
 
 	int updatePassword(String phone, String newPassword);
 
@@ -55,7 +56,7 @@ public interface UserService {
 
 	List<Users> selectByPhoneAndPassword(Map<String, Object> paramMap);
 	
-	Users checkLogin(String phone);
+	Users checkLogin(String username,String password);
 
 	List<String> getUserByType(Map<String, Object> paramMap);
 }

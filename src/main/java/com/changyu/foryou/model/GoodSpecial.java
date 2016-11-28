@@ -1,14 +1,14 @@
 package com.changyu.foryou.model;
 
 
-public class FoodSpecial extends FoodSpecialKey {
+public class GoodSpecial extends FoodSpecialKey {
     private String name;
 
     private Integer foodCount;
 
-    public FoodSpecial() {
+    public GoodSpecial() {
 	}
-    public FoodSpecial(Integer campusId,Long foodId, String specialName, Integer specialCount) {
+    public GoodSpecial(Integer campusId, Long foodId, String specialName, Integer specialCount) {
     	this.foodId=foodId;
     	this.name=specialName;
     	foodCount=specialCount;

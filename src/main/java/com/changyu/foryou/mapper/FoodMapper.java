@@ -3,43 +3,41 @@ package com.changyu.foryou.mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
-import com.changyu.foryou.model.Food;
-import com.changyu.foryou.model.FoodWithSales;
-import com.changyu.foryou.model.ShortFood;
-import com.changyu.foryou.model.ShortFoodWithIm;
-import com.changyu.foryou.model.VeryShortFood;
+import com.changyu.foryou.model.Good;
+import com.changyu.foryou.model.GoodWithSales;
+import com.changyu.foryou.model.ShortGood;
+import com.changyu.foryou.model.ShortGoodWithIm;
+import com.changyu.foryou.model.VeryShortGood;
 
 public interface FoodMapper {
     int deleteByPrimaryKey(Map<String, Object> paramMap);
 
-    int insert(Food record);
+    int insert(Good record);
 
-    int insertSelective(Food record);
+    int insertSelective(Good record);
 
-    Food selectByPrimaryKey(Map<String, Object> paramMap);
+    Good selectByPrimaryKey(Map<String, Object> paramMap);
 
-    int updateByPrimaryKeySelective(Food record);
+    int updateByPrimaryKeySelective(Good record);
 
-    int updateByPrimaryKey(Food record);
+    int updateByPrimaryKey(Good record);
 
-	List<Food> getAllFoods(Map<String, Object> paramMap);        //web管理端获取所有的食品
+	List<Good> getAllFoods(Map<String, Object> paramMap);        //web管理端获取所有的食品
 
-	List<ShortFood> getFoodListDiscount(Map<String, Object> paramMap);   //获取打折商品
+	List<ShortGood> getFoodListDiscount(Map<String, Object> paramMap);   //获取打折商品
  
-	List<ShortFood> getFoodListFresh(Map<String, Object> paramMap);      //获取新品食品
+	List<ShortGood> getFoodListFresh(Map<String, Object> paramMap);      //获取新品食品
 
-	List<ShortFood> getFoodListWelcome(Map<String, Object> paramMap);   //获取受欢迎商品
+	List<ShortGood> getFoodListWelcome(Map<String, Object> paramMap);   //获取受欢迎商品
 
 
-	List<ShortFoodWithIm> selectFoods(Map<String, Object> paramMap);
+	List<ShortGoodWithIm> selectFoods(Map<String, Object> paramMap);
 
-	List<ShortFoodWithIm> selectFoodsByTwoTags(Map<String, Object> paramMap);
+	List<ShortGoodWithIm> selectFoodsByTwoTags(Map<String, Object> paramMap);
 
 	int changeFoodNumber(Map<String, Object> paramMap);   //更新销量和减少库存
 
-	List<VeryShortFood> selectHomeFood(Map<String, Object> paramMap);
+	List<VeryShortGood> selectHomeFood(Map<String, Object> paramMap);
 
 	Integer uploadHomeFoodByFoodId(Map<String, Object> paramMap);//上传推送到首页的食品大图
 	
@@ -47,7 +45,7 @@ public interface FoodMapper {
 	
 	Integer cancelRecommend(Map<String, Object> paramMap);//取消推荐
 	
-	List<FoodWithSales> getTopFive(Map<String, Object> paramMap);
+	List<GoodWithSales> getTopFive(Map<String, Object> paramMap);
 	
 	Integer addFoodCountById(Map<String, Object> paramMap);//添加库存
 	

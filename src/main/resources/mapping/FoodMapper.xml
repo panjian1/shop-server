@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.changyu.foryou.mapper.FoodMapper">
 	<cache eviction="LRU" flushInterval="60000" size="512" readOnly="true"/>
-	<resultMap id="BaseResultMap" type="com.changyu.foryou.model.Food"
+	<resultMap id="BaseResultMap" type="com.changyu.foryou.model.Good"
 		extends="SmallResultMap">
 		<result column="grade" property="grade" jdbcType="REAL" />
 		<result column="info" property="info" jdbcType="VARCHAR" />
@@ -17,7 +17,7 @@
 		<result column="is_full_discount" property="isFullDiscount" jdbcType="VARCHAR"/>	
 	</resultMap>
 	
-	<resultMap type="com.changyu.foryou.model.ShortFoodWithIm" id="SmallWithImResultMap"
+	<resultMap type="com.changyu.foryou.model.ShortGoodWithIm" id="SmallWithImResultMap"
 	extends="SmallResultMap">
 	   <result column="info" property="info" jdbcType="VARCHAR" />
 	   <result column="message" property="message" jdbcType="VARCHAR" />
@@ -25,7 +25,7 @@
 	   <result column="comment_count" property="commentNumber" jdbcType="INTEGER" />
 	</resultMap>
 
-	<resultMap id="SmallResultMap" type="com.changyu.foryou.model.ShortFood">
+	<resultMap id="SmallResultMap" type="com.changyu.foryou.model.ShortGood">
 		<id column="food_id" property="foodId" jdbcType="BIGINT" />
 		<result column="campus_id" property="campusId" jdbcType="INTEGER" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
@@ -39,12 +39,12 @@
 		<result column="is_full_discount" property="isFullDiscount" jdbcType="VARCHAR"/>	
 	</resultMap>
 	
-	<resultMap type="com.changyu.foryou.model.VeryShortFood" id="VerySmallResultMap">
+	<resultMap type="com.changyu.foryou.model.VeryShortGood" id="VerySmallResultMap">
 		<id column="food_id" property="foodId" jdbcType="BIGINT" />
 		<result column="home_image" property="homeImgUrl" jdbcType="VARCHAR" />
 	</resultMap>
 	
-	<resultMap type="com.changyu.foryou.model.FoodWithSales" id="FoodWithSalesResultMap">
+	<resultMap type="com.changyu.foryou.model.GoodWithSales" id="FoodWithSalesResultMap">
 		<id column="food_id" property="foodId" jdbcType="BIGINT"/>
 		<result column="food_name" property="foodName" jdbcType="VARCHAR"/>
 		<result column="sales" property="sales" jdbcType="INTEGER"/>
@@ -100,7 +100,7 @@
 		#{foodId,jdbcType=BIGINT} and campus_id=#{campusId,jdbcType=INTEGER}
 	</update>
 
-	<insert id="insert" parameterType="com.changyu.foryou.model.Food">
+	<insert id="insert" parameterType="com.changyu.foryou.model.Good">
 		insert into food
 		(food_id,campus_id,
 		name, price,
@@ -129,7 +129,7 @@
 		#{saleNumber,jdbcType=BIGINT},
 		#{foodCount,jdbcType=INTEGER})
 	</insert>
-	<insert id="insertSelective" parameterType="com.changyu.foryou.model.Food">
+	<insert id="insertSelective" parameterType="com.changyu.foryou.model.Good">
 		insert into food
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="foodId != null">
@@ -245,7 +245,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.changyu.foryou.model.Food">
+	<update id="updateByPrimaryKeySelective" parameterType="com.changyu.foryou.model.Good">
 		update food
 		<set>
 		    <if test="isFullDiscount != null">
@@ -303,7 +303,7 @@
 		where food_id = #{foodId,jdbcType=BIGINT} and
 		campus_id=#{campusId,jdbcType=INTEGER}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.changyu.foryou.model.Food">
+	<update id="updateByPrimaryKey" parameterType="com.changyu.foryou.model.Good">
 		update food
 		set
 		food_count=#{foodCount,jdbcType=INTEGER},

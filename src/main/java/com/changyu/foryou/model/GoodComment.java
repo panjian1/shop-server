@@ -2,7 +2,7 @@ package com.changyu.foryou.model;
 
 import java.util.Date;
 
-public class FoodComment {
+public class GoodComment {
     private Long foodId;
     private Integer campusId;
     

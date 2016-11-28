@@ -1,55 +1,50 @@
 package com.changyu.foryou.model;
 
-import java.util.Date;
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
 
-public class Sellers {
-	private String campusAdmin;
+
+@AVClassName("Sellers")
+public class Sellers extends AVObject{
+	private String adminName;
 	
 	private String password;
 	
-	private Short type;
+	private String type;
 	
-	private Integer campusId;
-	
-	private Date lastLoginDate;
+	private String lastLoginDate;
 
-	public String getCampusAdmin() {
-		return campusAdmin;
+	public String getAdminName() {
+		return this.getString("adminName");
 	}
 
-	public void setCampusAdmin(String campusAdmin) {
-		this.campusAdmin = campusAdmin;
+	public void setAdminName(String adminName) {
+		this.put("adminName", adminName);
 	}
 
 	public String getPassword() {
-		return password;
+		return this.getString("password");
 	}
 
 	public void setPassword(String password) {
-		this.password = password == null ? null : password.trim();;
+		this.put("password", password);
 	}
 
-	public Short getType() {
-		return type;
+	public String getType() {
+		return this.getString("type");
 	}
 
-	public void setType(Short type) {
-		this.type = type;
+	public void setType(String type) {
+		this.put("type", type);
 	}
 
-	public Integer getCampusId() {
-		return campusId;
+	public String getLastLoginDate() {
+		return this.getString("lastLoginDate");
 	}
 
-	public void setCampusId(Integer campusId) {
-		this.campusId = campusId;
+	public void setLastLoginDate(String lastLoginDate) {
+		this.put("lastLoginDate", lastLoginDate);
 	}
 
-	public Date getLastLoginDate() {
-		return lastLoginDate;
-	}
-
-	public void setLastLoginDate(Date lastLoginDate) {
-		this.lastLoginDate = lastLoginDate;
-	}
+	public Sellers(){}
 }

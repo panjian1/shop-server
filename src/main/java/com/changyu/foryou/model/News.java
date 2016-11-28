@@ -1,13 +1,10 @@
 package com.changyu.foryou.model;
 
-import java.util.Date;
-
-public class News {
-    private Long newsId;
-
-    private Integer campusId;
-    
-    private Date createTime;
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVObject;
+@AVClassName("news")
+public class News extends AVObject{
+    private String newsId;
 
     private String title;
 
@@ -15,51 +12,38 @@ public class News {
 
     private String content;
 
-    public Long getNewsId() {
-        return newsId;
+    public String getNewsId() {
+        return this.getString("newsId");
     }
 
-    public void setNewsId(Long newsId) {
-        this.newsId = newsId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setNewsId(String newsId) {
+        this.put("newsId", newsId);
     }
 
     public String getTitle() {
-        return title;
+        return this.getString("title");
     }
 
     public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
+        this.put("title", title);
     }
 
     public String getImgUrl() {
-        return imgUrl;
+        return this.getString("imgUrl");
     }
 
     public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
+        this.put("imgUrl", imgUrl);
     }
 
     public String getContent() {
-        return content;
+        return this.getString("content");
     }
 
     public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+        this.put("content", content);
     }
 
-	public Integer getCampusId() {
-		return campusId;
-	}
+    public News(){}
 
-	public void setCampusId(Integer campusId) {
-		this.campusId = campusId;
-	}
 }

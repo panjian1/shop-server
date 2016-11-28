@@ -3,12 +3,12 @@ package com.changyu.foryou.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.changyu.foryou.model.FoodComment;
+import com.changyu.foryou.model.GoodComment;
 
 public interface FoodCommentMapper {
-    int insert(FoodComment record);
+    int insert(GoodComment record);
 
-    int insertSelective(FoodComment record);
+    int insertSelective(GoodComment record);
 
 	Long getCommentCountsById(Map<String, Object> paramMap);
 
@@ -16,9 +16,9 @@ public interface FoodCommentMapper {
 
 	Float getAvageGrade(Map<String, Object> paramMap);
 
-	List<FoodComment> getCommentsById(Map<String, Object> paramMap);
+	List<GoodComment> getCommentsById(Map<String, Object> paramMap);
 
-	List<FoodComment> getAllComments(Map<String, Object> paramMap);
+	List<GoodComment> getAllComments(Map<String, Object> paramMap);
 
 	Integer deleteFoodComment(Map<String, Object> paramMap);
 

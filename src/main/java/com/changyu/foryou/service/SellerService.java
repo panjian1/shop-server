@@ -2,6 +2,7 @@ package com.changyu.foryou.service;
 
 import java.util.Date;
 
+import com.avos.avoscloud.AVException;
 import com.changyu.foryou.model.Sellers;
 
 
@@ -11,5 +12,5 @@ public interface SellerService {
 
 	public void updateLastLoginTime(Date date, String campusAdmin);
 
-	public void addASeller(Sellers seller);
+	public void addASeller(Sellers seller) throws AVException;
 }

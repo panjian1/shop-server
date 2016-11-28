@@ -1,6 +1,6 @@
 package com.changyu.foryou.model;
 
-public class FoodWithSales {
+public class GoodWithSales {
 	private Long foodId;
 	private String foodName;
 	private Integer sales;

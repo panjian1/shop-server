@@ -3,7 +3,7 @@ package com.changyu.foryou.model;
 import java.util.Date;
 import java.util.List;
 
-public class Food {
+public class Good {
 	private Long foodId;
 
 	private String name;
@@ -56,10 +56,10 @@ public class Food {
 	public void setIsFullDiscount(Short isFullDiscount) {
 		this.isFullDiscount = isFullDiscount;
 	}
-	public Food(){
+	public Good(){
 		
 	}
-	public Food(Integer campusId,Long foodId2, String name2, Float price2, Float discountPrice2, String imageurl, String info, Short status2, String foodFlag2, Short isDiscount2, Integer categoryId2, Float primeCost2){
+	public Good(Integer campusId, Long foodId2, String name2, Float price2, Float discountPrice2, String imageurl, String info, Short status2, String foodFlag2, Short isDiscount2, Integer categoryId2, Float primeCost2){
 		foodId=foodId2;
 		name=name2;
 		price=price2;
@@ -75,10 +75,10 @@ public class Food {
 		saleNumber=0l;
 		this.campusId=campusId;
 	}
-	public Food(Long foodId2, String name2, String price2,
-			String discountPrice2, String grade2, String imgUrl2, String info2,
-			String status2, String foodCount2, String foodFlag2, String tag2,
-			String isDiscount2, String categoryId2, String primeCost2) {
+	public Good(Long foodId2, String name2, String price2,
+				String discountPrice2, String grade2, String imgUrl2, String info2,
+				String status2, String foodCount2, String foodFlag2, String tag2,
+				String isDiscount2, String categoryId2, String primeCost2) {
 		foodId=foodId2;
 
 		if(name2!=null){

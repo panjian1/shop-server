@@ -1,15 +1,11 @@
 package com.changyu.foryou.model;
 
+import com.avos.avoscloud.AVUser;
+
 import java.util.Date;
 
-public class Users {
-    private String phone;
+public class Users  extends AVUser {
 
-    private String password;
-
-    private Short type;
-
-    private String nickname;
 
     private String imgUrl;
 
@@ -21,66 +17,36 @@ public class Users {
     
     private String token;
     
-    private Short sex;
+    private String sex;
     
     private String academy;
     
     private String qq;
     
     private String weiXin;
-    
-    private Integer campusId;
-    
-    public Users(String phone2, String password2, String nickname2) {
-		phone=phone2;
-		password=password2;
-		nickname=nickname2;
-		type=2;
+
+	private String weibo;
+
+    private String source;
+
+
+	public Users(String username2, String password2,String source) {
+		this.setUsername(username2);
+		this.setPassword(password2);
+		this.setSource(source);
 		createTime=new Date();
 		lastLoginDate=new Date();
 	}
-
 	public Users() {
 	}
 
-	public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
-
-    public Short getType() {
-        return type;
-    }
-
-    public void setType(Short type) {
-        this.type = type;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
-    }
 
     public String getImgUrl() {
-        return imgUrl;
+        return this.getString("imgUrl");
     }
 
     public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
+		this.put("imgUrl",this.imgUrl = imgUrl == null ? null : imgUrl.trim());
     }
 
     public Date getLastLoginDate() {
@@ -116,12 +82,12 @@ public class Users {
 		this.defaultAddress = defaultAddress;
 	}
 
-	public Short getSex() {
-		return sex;
+	public String getSex() {
+		return this.getString("sex");
 	}
 
-	public void setSex(Short sex) {
-		this.sex = sex;
+	public void setSex(String sex) {
+		this.put("sex",sex);
 	}
 
 	public String getAcademy() {
@@ -133,26 +99,35 @@ public class Users {
 	}
 
 	public String getQq() {
-		return qq;
+		return this.getString("qq");
 	}
 
 	public void setQq(String qq) {
-		this.qq = qq;
+		this.put("qq",qq);
 	}
 
 	public String getWeiXin() {
-		return weiXin;
+		return this.getString("weixin");
 	}
 
 	public void setWeiXin(String weiXin) {
-		this.weiXin = weiXin;
+		this.put("weixin",weiXin);
 	}
 
-	public Integer getCampusId() {
-		return campusId;
+
+	public String getWeibo() {
+		return this.getString("weibo");
 	}
 
-	public void setCampusId(Integer campusId) {
-		this.campusId = campusId;
+	public void setWeibo(String weibo) {
+		this.put("weibo",weibo);
+	}
+
+	public String getSource() {
+		return this.getString("source");
+	}
+
+	public void setSource(String source) {
+		this.put("source",source);
 	}
 }

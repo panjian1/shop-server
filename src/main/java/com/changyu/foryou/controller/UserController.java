@@ -139,27 +139,17 @@ public class UserController {
 	 */
 	@RequestMapping(value="/toLogin")
 	public @ResponseBody
-	Map<String, Object> toLogin(@RequestParam String phone,@RequestParam String password,HttpServletRequest request) {
+	Map<String, Object> toLogin(@RequestParam String username,@RequestParam String password,HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		if (phone!=null&&password!=null&&!phone.trim().equals("") && !password.trim().equals("")) {
-			Users users = userService.checkLogin(phone);
+		if (username!=null&&password!=null&&!username.trim().equals("") && !password.trim().equals("")) {
+			Users users = userService.checkLogin(username,password);
 			if (users != null) {
-				System.out.println(Md5.GetMD5Code(password));
-				if (users.getPassword().equals(Md5.GetMD5Code(password))) {
-					map.put(Constants.STATUS, Constants.SUCCESS);
-					map.put(Constants.MESSAGE, "登陆成功");
-					map.put("type", users.getType());
-					HttpSession session=request.getSession();
-					session.setAttribute("type", users.getType());
-					session.setAttribute("phone", users.getPhone());
-					Date date=new Date();
-					userService.updateLastLoginTime(date,phone);
-					orderService.deleteStatus7Order(phone);
-				} else {
-					map.put(Constants.STATUS, Constants.FAILURE);
-					map.put(Constants.MESSAGE, "账号或密码错误，请检查后输入");
-				}
+				map.put(Constants.STATUS, Constants.SUCCESS);
+				map.put(Constants.MESSAGE, "登陆成功");
+
+				HttpSession session=request.getSession();
+				session.setAttribute("username", users.getUsername());
 			} else {
 				map.put(Constants.STATUS, Constants.FAILURE);
 				map.put(Constants.MESSAGE, "账号或密码错误，请检查后输入");
@@ -190,23 +180,21 @@ public class UserController {
 
 	/**
 	 * 用户注册
-	 * @param phone
+	 * @param username
 	 * @param password
 	 * @param nickname
 	 * @return
 	 */
 	@RequestMapping(value="/registerIn")
 	public @ResponseBody
-	Map<String, Object> registerIn(@RequestParam String phone,
-			@RequestParam String password, @RequestParam String nickname) {
+	Map<String, Object> registerIn(@RequestParam String username,
+			@RequestParam String password, @RequestParam String source) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		try {
-			if (!phone.equals("") && phone.length() == 11
+			if (!username.equals("") && username.length() == 11
 					&& !password.equals("")) {
-				String passwordMd5=Md5.GetMD5Code(password);
-
-				Users users = new Users(phone, passwordMd5, nickname);
+				Users users = new Users(username, password,source);
 				userService.addUsers(users);
 				map.put(Constants.STATUS, Constants.SUCCESS);
 				map.put(Constants.MESSAGE, "注册成功");
@@ -263,12 +251,12 @@ public class UserController {
 	 */
 	@RequestMapping(value="/updateUserInfo")
 	public @ResponseBody Map<String,Object> updateUserInfo(@RequestParam String phone,
-			String nickname,String type,String sex,String academy,String qq,String weiXin){
+			String type,String sex,String academy,String qq,String weiXin){
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		try {
 			Users users=new Users();
-			users.setPhone(phone);
+			users.setMobilePhoneNumber(phone);
 			if(weiXin!=null)
 			{
 				users.setWeiXin(weiXin);
@@ -285,16 +273,7 @@ public class UserController {
 			}
 			
 			if(sex!=null){
-				users.setSex((short)Integer.parseInt(sex));
-			}
-			
-			if(nickname!=null){
-				users.setNickname(nickname);
-			}
-
-
-			if(type!=null){
-				users.setType((short)Integer.parseInt(type));
+				users.setSex(sex);
 			}
 
 			if(userService.updateUserInfo(users)!=-1){

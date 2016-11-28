@@ -20,7 +20,7 @@ import com.changyu.foryou.model.CampusAdmin;
 import com.changyu.foryou.model.City;
 import com.changyu.foryou.model.CityWithCampus;
 import com.changyu.foryou.service.CampusService;
-import com.changyu.foryou.service.FoodService;
+import com.changyu.foryou.service.GoodService;
 import com.changyu.foryou.tools.Constants;
 import com.changyu.foryou.tools.Md5;
 
@@ -30,7 +30,7 @@ public class CampusController {
 	private CampusService campusService;
 	
 	@Autowired
-	private FoodService foodService;
+	private GoodService foodService;
 
 	public CampusService getCampusService() {
 		return campusService;

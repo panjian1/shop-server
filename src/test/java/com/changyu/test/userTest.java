@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.avos.avoscloud.AVOSCloud;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -188,9 +189,9 @@ public class userTest {
 	 * @param password
 	 * @return
 	 */
-	
+	@Test
 	public void toLogin() {
-		String phone=null;
+		String username=null;
 		String password=null;
 		Map<String, Object> map = new HashMap<String, Object>();
 //		case1
@@ -200,25 +201,15 @@ public class userTest {
 //		phone= "1889655488";
 //		password="123456789";
 //		case3
-		phone= "18896554880";
-		password="12345678";
+		username= "19856852569";
+		password="1111223";
 
-		if (phone!=null&&password!=null&&!phone.trim().equals("") && !password.trim().equals("")) {
-			Users users = userService.selectByUsername(phone);
+		if (username!=null&&password!=null&&!username.trim().equals("") && !password.trim().equals("")) {
+			Users users = userService.checkLogin(username,password);
 			if (users != null) {
-				if (users.getPassword().equals(Md5.GetMD5Code(password))) {
-					map.put(Constants.STATUS, Constants.SUCCESS);
-					map.put(Constants.MESSAGE, "登陆成功");
-					map.put("type", users.getType());
-//					HttpSession session=request.getSession();
-//					session.setAttribute("type", users.getType());
-//					session.setAttribute("phone", users.getPhone());
-					Date date=new Date();
-					userService.updateLastLoginTime(date,phone);					
-				} else {
-					map.put(Constants.STATUS, Constants.FAILURE);
-					map.put(Constants.MESSAGE, "账号或密码错误，请检查后输入");
-				}
+				map.put(Constants.STATUS, Constants.SUCCESS);
+				map.put(Constants.MESSAGE, "登陆成功");
+
 			} else {
 				map.put(Constants.STATUS, Constants.FAILURE);
 				map.put(Constants.MESSAGE, "账号或密码错误，请检查后输入");
@@ -259,9 +250,10 @@ public class userTest {
 	 * @param nickname
 	 * @return
 	 */
-	
+	@Test
 	public void registerIn() {
-		 String phone=null;
+		//AVOSCloud.initialize("zaeoJsvpr1Do7ufp9D8Ci0BH-gzGzoHsz", "dSM3xn9gnWi0rO02XzNsRVSe", "z0zHlnD9RtPdN1Q7dMi2kISy");
+		 String username=null;
 		 String password=null;
 		 String nickname=null;
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -280,17 +272,16 @@ public class userTest {
 //		phone="18812345678";
 //		nickname="11";
 //		case5
-		phone="18812345678";
-		password="1111";
-
+		username="19856852569";
+		password="111122";
+		String source = "weibo";
 		
 		
 		try {
-			if (!phone.equals("") && phone.length() == 11
+			if (!username.equals("") && username.length() == 11
 					&& !password.equals("")) {
-				String passwordMd5=Md5.GetMD5Code(password);
-
-				Users users = new Users(phone, passwordMd5, nickname);
+				Users users = new Users(username, password,source);
+				users.setImgUrl("111111111221");
 				userService.addUsers(users);
 				map.put(Constants.STATUS, Constants.SUCCESS);
 				map.put(Constants.MESSAGE, "注册成功");
@@ -438,7 +429,7 @@ public class userTest {
 		String weiXin=null;
 		try {
 			Users users=new Users();
-			users.setPhone(phone);
+			users.setMobilePhoneNumber(phone);
 			if(weiXin!=null)
 			{
 				users.setWeiXin(weiXin);
@@ -455,17 +446,9 @@ public class userTest {
 			}
 			
 			if(sex!=null){
-				users.setSex((short)Integer.parseInt(sex));
-			}
-			
-			if(nickname!=null){
-				users.setNickname(nickname);
+				users.setSex(sex);
 			}
 
-
-			if(type!=null){
-				users.setType((short)Integer.parseInt(type));
-			}
 
 			if(userService.updateUserInfo(users)!=-1){
 				map.put(Constants.STATUS, Constants.SUCCESS);

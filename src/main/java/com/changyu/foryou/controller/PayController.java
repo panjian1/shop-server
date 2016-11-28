@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
 import com.changyu.foryou.model.Order;
-import com.changyu.foryou.service.FoodService;
+import com.changyu.foryou.service.GoodService;
 import com.changyu.foryou.service.OrderService;
 import com.changyu.foryou.service.PayService;
 import com.changyu.foryou.service.PushService;
@@ -39,7 +39,7 @@ public class PayController {
 	private OrderService orderService;
     private UserService userService;
     private PushService pushService;
-    private FoodService foodService;
+    private GoodService foodService;
     
     private static final Logger LOGGER = Logger
 			.getLogger(PayController.class);
@@ -53,7 +53,7 @@ public class PayController {
 	}
 
 	@Autowired
-	public void setFoodService(FoodService foodService) {
+	public void setFoodService(GoodService foodService) {
 		this.foodService = foodService;
 	}
 	

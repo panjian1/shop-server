@@ -3,6 +3,7 @@ package com.changyu.foryou.service;
 import java.util.List;
 import java.util.Map;
 
+import com.avos.avoscloud.AVException;
 import com.changyu.foryou.model.News;
 import com.changyu.foryou.model.SmallNews;
 
@@ -11,12 +12,12 @@ public interface NewsService {
 
 	List<SmallNews> getSmallNews(Map<String,Object> map);
 
-	News getNewsById(Long newsId);
+	News getNewsById(String newsId);
 
-	List<News> getPcAllNews(Map<String, Object> requestMap);
+	List<News> getPcAllNews();
 
-	Integer addNews(News news);
+	void addNews(News news) throws AVException;
 
-	int deleteById(String id);
+	void deleteById(String id) throws Exception;
 
 }

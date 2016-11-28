@@ -1,6 +1,6 @@
 package com.changyu.foryou.model;
 
-public class ShortFoodWithIm extends ShortFood {
+public class ShortGoodWithIm extends ShortGood {
 	private String info;
 	
 	private String message;

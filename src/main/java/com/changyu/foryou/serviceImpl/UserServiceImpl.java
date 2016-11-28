@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +37,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 
-	public void addUsers(Users users) {
-		usersMapper.insertSelective(users);
+	public void addUsers(Users users) throws AVException{
+		users.signUp();
 	}
 
 	public int updatePassword(String phone, String newPassword) {
@@ -133,8 +135,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Users checkLogin(String phone) {
-		return usersMapper.checkLogin(phone);
+	public Users checkLogin(String username,String password) {
+		Users users = null;
+		try {
+			 users = AVUser.logIn(username, password,Users.class);
+		} catch (AVException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return  users;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.changyu.foryou.model;
 
-public class VeryShortFood {
+public class VeryShortGood {
 	private Long foodId;
 	
 	private String homeImgUrl;

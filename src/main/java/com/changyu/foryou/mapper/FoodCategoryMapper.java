@@ -3,35 +3,33 @@ package com.changyu.foryou.mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
-import com.changyu.foryou.model.FoodCategory;
+import com.changyu.foryou.model.GoodCategory;
 import com.changyu.foryou.model.HomeCategory;
 
 public interface FoodCategoryMapper {
     int deleteByPrimaryKey(Map<String, Object> paramMap);
 
-    int insert(FoodCategory record);
+    int insert(GoodCategory record);
 
-    int insertSelective(FoodCategory record);
+    int insertSelective(GoodCategory record);
 
-    FoodCategory selectByPrimaryKey(Map<String, Object> paramMap);
+    GoodCategory selectByPrimaryKey(Map<String, Object> paramMap);
 
-    int updateByPrimaryKeySelective(FoodCategory record);
+    int updateByPrimaryKeySelective(GoodCategory record);
 
-    int updateByPrimaryKey(FoodCategory record);
+    int updateByPrimaryKey(GoodCategory record);
 
-	List<FoodCategory> getFirstCategory(Map<String, Object> paramMap);
+	List<GoodCategory> getFirstCategory(Map<String, Object> paramMap);
 
 	//List<FoodCategory> getSecondCategoryes(@Param(value="categoryId")Integer id);
 
-	List<FoodCategory> getAllFoodSecondCategories();
+	List<GoodCategory> getAllFoodSecondCategories();
 
-	List<FoodCategory> getAllFoodFirstCategories();
+	List<GoodCategory> getAllFoodFirstCategories();
 
 	List<HomeCategory> getHomeCategoryInfo(Map<String, Object> paramMap);
 
-	List<FoodCategory> getAllFoodCategories(Map<String, Object> paramMap);
+	List<GoodCategory> getAllFoodCategories(Map<String, Object> paramMap);
 	
 	int getAllCategoryCount();
 	

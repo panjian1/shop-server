@@ -26,7 +26,7 @@ import com.changyu.foryou.model.SmallOrder;
 import com.changyu.foryou.model.TogetherOrder;
 import com.changyu.foryou.payment.ChargeInterface;
 import com.changyu.foryou.service.CampusService;
-import com.changyu.foryou.service.FoodService;
+import com.changyu.foryou.service.GoodService;
 import com.changyu.foryou.service.OrderService;
 import com.changyu.foryou.service.PushService;
 import com.changyu.foryou.service.UserService;
@@ -42,7 +42,7 @@ public class orderTest {
 	private static final Logger LOGGER = Logger
 			.getLogger(orderTest.class);
 	private OrderService orderService;
-	private FoodService foodService;
+	private GoodService foodService;
 	private UserService userService;
 	private CampusService campusService;   
 	private PushService pushService;
@@ -69,12 +69,12 @@ public class orderTest {
 		return orderService;
 	}
 
-	public FoodService getFoodService() {
+	public GoodService getFoodService() {
 		return foodService;
 	}
 
 	@Autowired
-	public void setFoodService(FoodService foodService) {
+	public void setFoodService(GoodService foodService) {
 		this.foodService = foodService;
 	}
 

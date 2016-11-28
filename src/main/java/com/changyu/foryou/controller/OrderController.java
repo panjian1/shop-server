@@ -37,7 +37,7 @@ import com.changyu.foryou.model.TogetherOrder;
 import com.changyu.foryou.model.TradeInfo;
 import com.changyu.foryou.payment.ChargeInterface;
 import com.changyu.foryou.service.CampusService;
-import com.changyu.foryou.service.FoodService;
+import com.changyu.foryou.service.GoodService;
 import com.changyu.foryou.service.OrderService;
 import com.changyu.foryou.service.PreferentialService;
 import com.changyu.foryou.service.PushService;
@@ -59,7 +59,7 @@ import com.pingplusplus.model.Refund;
 public class OrderController {
 	private OrderService orderService;
 	private UserService userService;
-	private FoodService foodService;
+	private GoodService foodService;
 	private ReceiverService receiverService;
 	private CampusService  campusService;
 	private PushService pushService;
@@ -93,7 +93,7 @@ public class OrderController {
 	}
 
 	@Autowired
-	public void setFoodService(FoodService foodService) {
+	public void setFoodService(GoodService foodService) {
 		this.foodService = foodService;
 	}
 

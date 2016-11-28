@@ -10,6 +10,8 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,15 +83,15 @@ public class NewsController {
 
 	/**
 	 * 根据id获取新闻
-	 * @param newsId
+	 * @param objectId
 	 * @return
 	 */
 	@RequestMapping("/getNewsById")
-	public @ResponseBody Map<String,Object> getNewsById(@RequestParam Long newsId){
+	public @ResponseBody Map<String,Object> getNewsById(@RequestParam String objectId){
 		Map<String, Object> map=new HashMap<String,Object>();
 		
 		try {
-			News news=newsService.getNewsById(newsId);
+			News news=newsService.getNewsById(objectId);
 			if(news==null){
 				map.put(Constants.STATUS, Constants.FAILURE);
 				map.put(Constants.MESSAGE,"获取新闻失败");
@@ -107,12 +109,12 @@ public class NewsController {
 	}
 
 	@RequestMapping("/getPCAllNews")
-	public @ResponseBody JSONArray getPcAllNews(@RequestParam Integer campusId){
+	public @ResponseBody JSONArray getPcAllNews(){
 		List<News> news=null;
-		Map<String, Object> requestMap = new HashMap<String, Object>();
-		requestMap.put("campusId",campusId);
+
+
 		try {
-			news=newsService.getPcAllNews(requestMap);
+			news=newsService.getPcAllNews();
 			System.out.println(news.size());
 			for(News newsMessage:news){
 				if(newsMessage.getContent().length()>27){
@@ -143,33 +145,27 @@ public class NewsController {
 		
 		String title=request.getParameter("title");
 		String content=request.getParameter("content");
-		Integer campusId = Integer.parseInt(request.getParameter("campusId"));
-		if(myfile.isEmpty()){  
+		if(myfile.isEmpty()){
 			System.out.println("文件未上传");  
 		}else{  			
 			String contentType=myfile.getContentType();
 
 			if(contentType.startsWith("image")){
-				String realPath = request.getSession().getServletContext().getRealPath("/"); 
-
-				realPath=realPath.replace("foryou", "ForyouImage");
-				realPath=realPath.concat("/news");
-
-				System.out.println(realPath);
 				String newFileName=new Date().getTime()+""+new Random().nextInt()+".jpg";
-				FileUtils.copyInputStreamToFile(myfile.getInputStream(), new File(realPath, newFileName));  
-
-				String imageUrl=Constants.localIp+"/news/"+newFileName;
-				news.setImgUrl(imageUrl);
+				try {
+				AVFile file = new AVFile(newFileName,myfile.getBytes());
+				file.save();
+				//FileUtils.copyInputStreamToFile(myfile.getInputStream(), new File(realPath, newFileName));
+				news.setImgUrl(file.getUrl());
 				news.setTitle(title);
-				news.setCreateTime(new Date());
 				news.setContent(content);
-				news.setNewsId(new Date().getTime());
-				news.setCampusId(campusId);
-				int flag= newsService.addNews(news);
-				if(flag!=0&&flag!=-1){
-					return "redirect:/pages/news.html";
+				news.setNewsId(String.valueOf(new Date().getTime()));
+				newsService.addNews(news);
+				} catch (AVException e) {
+					e.printStackTrace();
+					return "redirect:/pages/uploadError.html";
 				}
+				return "redirect:/pages/news.html";
 			}
 		}  
 
@@ -177,24 +173,17 @@ public class NewsController {
 	}
 
 	@RequestMapping(value="/deleteNews",method=RequestMethod.POST)
-	public @ResponseBody Map<String,Object> deleteNewsById(String newsId){
+	public @ResponseBody Map<String,Object> deleteNewsById(String objectId){
 		Map<String, Object> map=new HashMap<>(); 
-		String ids[]=newsId.split(",");
+		String ids[]=objectId.split(",");
 		try {
-			int flag=0;
-
 			for (String id:ids) {
 				if(id!=null&&!id.equals("")){
-					flag=newsService.deleteById(id);
+					newsService.deleteById(id);
 				}
 			}
-            if(flag!=-1){
-            	map.put(Constants.STATUS, Constants.SUCCESS);
-            	map.put(Constants.MESSAGE, "删除新闻成功！");
-            }else{
-            	map.put(Constants.STATUS, Constants.FAILURE);
-            	map.put(Constants.MESSAGE, "删除新闻失败！");
-            }
+			map.put(Constants.STATUS, Constants.SUCCESS);
+			map.put(Constants.MESSAGE, "删除新闻成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
 			map.put(Constants.STATUS, Constants.FAILURE);

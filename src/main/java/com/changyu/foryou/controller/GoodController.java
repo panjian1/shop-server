@@ -27,34 +27,34 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.changyu.foryou.model.Food;
-import com.changyu.foryou.model.FoodCategory;
-import com.changyu.foryou.model.FoodComment;
-import com.changyu.foryou.model.FoodSpecial;
+import com.changyu.foryou.model.Good;
+import com.changyu.foryou.model.GoodCategory;
+import com.changyu.foryou.model.GoodComment;
+import com.changyu.foryou.model.GoodSpecial;
 import com.changyu.foryou.model.HomeCategory;
 import com.changyu.foryou.model.Order;
-import com.changyu.foryou.model.ShortFood;
-import com.changyu.foryou.model.ShortFoodWithIm;
-import com.changyu.foryou.model.VeryShortFood;
+import com.changyu.foryou.model.ShortGood;
+import com.changyu.foryou.model.ShortGoodWithIm;
+import com.changyu.foryou.model.VeryShortGood;
 import com.changyu.foryou.service.CampusService;
-import com.changyu.foryou.service.FoodService;
+import com.changyu.foryou.service.GoodService;
 import com.changyu.foryou.service.OrderService;
 import com.changyu.foryou.tools.Constants;
 
 /**
- * 食品控制类
+ * 商品控制类
  * 
- * @author 殿下 2014/12/16
+ * @author 帅哥 2014/12/16
  */
 @Controller
 @RequestMapping("/service")
-public class FoodController {
-	private FoodService foodService;
+public class GoodController {
+	private GoodService goodService;
 	private OrderService orderService;
-	private CampusService campusService;
+
 
 	protected static final Logger LOG = LoggerFactory
-			.getLogger(FoodController.class);
+			.getLogger(GoodController.class);
 
 	@Autowired
 	public void setOrderService(OrderService orderService) {
@@ -62,41 +62,34 @@ public class FoodController {
 	}
 
 	@Autowired
-	public void setFoodService(FoodService foodService) {
-		this.foodService = foodService;
-	}
-
-	@Autowired
-	public void setCampusService(CampusService campusService) {
-		this.campusService = campusService;
+	public void setGoodService(GoodService goodService) {
+		this.goodService = goodService;
 	}
 
 	/**
-	 * 获取食品的分类,给手机移动端(一级分类)
+	 * 获取商品的分类,给手机移动端(一级分类)
 	 * 
-	 * @param campusId
-	 *            校区id
+	 * @para
 	 * @return
 	 */
 	@RequestMapping("/getCategory")
 	public @ResponseBody
-	Map<String, Object> getFoodFirstCategory(@RequestParam Integer campusId,
+	Map<String, Object> getFoodFirstCategory(
 			Integer page, Integer limit) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("campusId", campusId);
 			if (limit != null && page != null) {
 				paramMap.put("limit", limit);
 				paramMap.put("offset", limit * (page - 1));
 			}
 
-			List<FoodCategory> foodCategories = foodService
+			List<GoodCategory> goodCategories = goodService
 					.getFirstCategory(paramMap);
-			if (foodCategories != null) {
+			if (goodCategories != null) {
 				map.put(Constants.STATUS, Constants.SUCCESS);
 				map.put(Constants.MESSAGE, "获取一级分类成功");
-				map.put("foodCategory", foodCategories);
+				map.put("goodCategory", goodCategories);
 			} else {
 				map.put(Constants.STATUS, Constants.FAILURE);
 				map.put(Constants.MESSAGE, "还没有一级分类哦");
@@ -110,11 +103,11 @@ public class FoodController {
 	}
 
 	/**
-	 * 返回食品模糊查询
+	 * 返回商品模糊查询
 	 * 
 	 * @param categoryId
 	 *            参数可选
-	 * @param foodTag
+	 * @param goodTag
 	 *            参数可选
 	 * @param sortId
 	 *            排序根据 0 综合排序，1，销量排序，2价格排序
@@ -122,19 +115,17 @@ public class FoodController {
 	 *            显示第几页的数据
 	 * @return
 	 */
-	@RequestMapping("/selectFoods")
+	@RequestMapping("/selectGoods")
 	public @ResponseBody
-	Map<String, Object> selectFoods(@RequestParam Integer campusId,
-			String categoryId, String foodTag, Integer page, Integer limit,
+	Map<String, Object> selectGoods(
+			String categoryId, String goodTag, Integer page, Integer limit,
 			Integer sortId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		DecimalFormat df = new DecimalFormat("#.0");
 		try {
-			List<String> foodFlags = new ArrayList<String>();
-			List<ShortFoodWithIm> foods = new ArrayList<ShortFoodWithIm>();
+			List<String> goodFlags = new ArrayList<String>();
+			List<ShortGoodWithIm> goods = new ArrayList<ShortGoodWithIm>();
 			Map<String, Object> paramMap = new HashMap<>();
-			paramMap.put("campusId", campusId);
-
 			if (categoryId != null && categoryId.trim().equals("")) {
 				categoryId = null;
 			}
@@ -149,14 +140,14 @@ public class FoodController {
 			}
 			paramMap.put("categoryId", categoryId);
 			paramMap.put("sortId", sortId);
-			if (foodTag != null && foodTag.trim().equals("") || foodTag == null) {
-				foodTag = null; // foodTag为空
-				paramMap.put("foodTag", foodTag);
-				foods = foodService.selectFoods(paramMap);
-				if (foods.size() > 0) {
-					for (ShortFoodWithIm i : foods) {
+			if (goodTag != null && goodTag.trim().equals("") || goodTag == null) {
+				goodTag = null; // foodTag为空
+				paramMap.put("goodTag", goodTag);
+				goods = goodService.selectGoods(paramMap);
+				if (goods.size() > 0) {
+					for (ShortGoodWithIm i : goods) {
 						paramMap.put("foodId", i.getFoodId());
-						Integer commentNumber = foodService
+						Integer commentNumber = goodService
 								.calCommentCount(paramMap);
 						i.setCommentNumber(commentNumber);
 					}
@@ -176,7 +167,7 @@ public class FoodController {
 					paramMap.put("foodTag", foodFlags.get(0));
 					foods = foodService.selectFoods(paramMap);
 					if (foods.size() > 0) {
-						for (ShortFoodWithIm i : foods) {
+						for (ShortGoodWithIm i : foods) {
 							paramMap.put("foodId", i.getFoodId());
 							Integer commentNumber = foodService
 									.calCommentCount(paramMap);
@@ -188,7 +179,7 @@ public class FoodController {
 					paramMap.put("twoFlag", foodFlags.get(1));
 					foods = foodService.selectFoodsByTwoTags(paramMap);
 					if (foods.size() > 0) {
-						for (ShortFoodWithIm i : foods) {
+						for (ShortGoodWithIm i : foods) {
 							paramMap.put("foodId", i.getFoodId());
 							Integer commentNumber = foodService
 									.calCommentCount(paramMap);
@@ -199,7 +190,7 @@ public class FoodController {
 			}
 			if (foods.size() != 0) {
 				// 评星级
-				for (ShortFoodWithIm food : foods) {
+				for (ShortGoodWithIm food : foods) {
 					paramMap.put("foodId", food.getFoodId());
 					Float gradeFloat = foodService.getAvageGrade(paramMap);
 					if (gradeFloat == null) {
@@ -211,7 +202,7 @@ public class FoodController {
 			}
 			if (foods.size() != 0) {
 				map.put(Constants.STATUS, Constants.SUCCESS);
-				map.put(Constants.MESSAGE, "获取食品成功");
+				map.put(Constants.MESSAGE, "获取商品成功");
 				map.put("foods", foods);
 				System.out.println(JSON.toJSONString(foods));
 			} else {
@@ -228,7 +219,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 根据食品id和校区获取某个零食
+	 * 根据商品id和校区获取某个零食
 	 * 
 	 * @param foodId
 	 * @param campusId
@@ -246,7 +237,7 @@ public class FoodController {
 			paramMap.put("foodId", foodId);
 			paramMap.put("campusId", campusId);
 
-			Food food = foodService.selectFoodByPrimaryKey(paramMap);
+			Good food = foodService.selectFoodByPrimaryKey(paramMap);
 			// List<FoodSpecial>
 			// foodSpecials=foodService.getFoodSpecial(paramMap);
 
@@ -262,7 +253,7 @@ public class FoodController {
 						.getCommentCountsById(paramMap));
 				// food.setFoodSpecial(foodSpecials);
 				map.put(Constants.STATUS, Constants.SUCCESS);
-				map.put(Constants.MESSAGE, "获取食品成功");
+				map.put(Constants.MESSAGE, "获取商品成功");
 				map.put("food", food);
 			} else {
 				map.put(Constants.STATUS, Constants.FAILURE);
@@ -277,7 +268,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 删除食品
+	 * 删除商品
 	 * 
 	 * @param foodId
 	 *            ,campusId
@@ -327,7 +318,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 获取某一食品的评论
+	 * 获取某一商品的评论
 	 * 
 	 * @param foodId
 	 * @param page
@@ -352,7 +343,7 @@ public class FoodController {
 				paramMap.put("limit", limit);
 			}
 
-			List<FoodComment> foodComments = foodService
+			List<GoodComment> foodComments = foodService
 					.getCommentInfoById(paramMap);
 			JSONArray jsonArray = JSON.parseArray(JSON
 					.toJSONStringWithDateFormat(foodComments, "yyyy-MM-dd"));
@@ -409,14 +400,14 @@ public class FoodController {
 	}
 
 	/**
-	 * 获取所有的食品
+	 * 获取所有的商品
 	 * 
 	 * @return
 	 */
 	@RequestMapping("/getAllFoods")
 	public @ResponseBody
-	List<Food> getAllFoods(@RequestParam Integer campusId) {
-		List<Food> foods = new ArrayList<Food>();
+	List<Good> getAllFoods(@RequestParam Integer campusId) {
+		List<Good> foods = new ArrayList<Good>();
 
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -430,7 +421,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 添加食品口味 弃用
+	 * 添加商品口味 弃用
 	 * 
 	 * @param campusId
 	 * @param foodId
@@ -445,7 +436,7 @@ public class FoodController {
 			@RequestParam Integer campusId, @RequestParam String specialName,
 			@RequestParam Integer specialCount) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		FoodSpecial foodSpecial = null;
+		GoodSpecial foodSpecial = null;
 		int flag = 0;
 
 		try {
@@ -455,11 +446,11 @@ public class FoodController {
 
 			if (foodService.getSpecialCount(paramMap) >= 3) {
 				map.put(Constants.STATUS, Constants.FAILURE);
-				map.put(Constants.MESSAGE, "食品口味种类已饱和，不可再添加！");
+				map.put(Constants.MESSAGE, "商品口味种类已饱和，不可再添加！");
 				return map;
 			}
 
-			foodSpecial = new FoodSpecial(campusId, foodId, specialName,
+			foodSpecial = new GoodSpecial(campusId, foodId, specialName,
 					specialCount);
 			Integer max = foodService.getSpecialMax(paramMap);
 
@@ -472,15 +463,15 @@ public class FoodController {
 
 			if (flag != 0 && flag != -1) {
 				map.put(Constants.STATUS, Constants.SUCCESS);
-				map.put(Constants.MESSAGE, "添加食品口味成功！");
+				map.put(Constants.MESSAGE, "添加商品口味成功！");
 			} else {
 				map.put(Constants.STATUS, Constants.FAILURE);
-				map.put(Constants.MESSAGE, "添加食品口味失败！");
+				map.put(Constants.MESSAGE, "添加商品口味失败！");
 			}
 		} catch (Exception e) {
 			e.getStackTrace();
 			map.put(Constants.STATUS, Constants.FAILURE);
-			map.put(Constants.MESSAGE, "添加食品口味失败！");
+			map.put(Constants.MESSAGE, "添加商品口味失败！");
 		}
 
 		return map;
@@ -511,7 +502,7 @@ public class FoodController {
 				map.put(Constants.STATUS, Constants.FAILURE);
 				map.put(Constants.MESSAGE, "没有评论权限！");
 			} else {
-				FoodComment foodComment = new FoodComment();
+				GoodComment foodComment = new GoodComment();
 				foodComment.setComment(comment);
 				foodComment.setFoodId(foodId);
 				foodComment.setDate(Calendar.getInstance().getTime());
@@ -542,7 +533,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 删除食品评价
+	 * 删除商品评价
 	 * 
 	 * @param foodId
 	 * @param campusId
@@ -593,7 +584,7 @@ public class FoodController {
 				paramMap.put("offset", (page - 1) * limit);
 				paramMap.put("limit", limit);
 			}
-			List<ShortFood> foodlist = foodService
+			List<ShortGood> foodlist = foodService
 					.getFoodListDiscount(paramMap);
 			map.put(Constants.STATUS, Constants.SUCCESS);
 			map.put(Constants.MESSAGE, "获取数据成功！");
@@ -608,7 +599,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 获取销量好的食品
+	 * 获取销量好的商品
 	 * 
 	 * @param page
 	 *            ,limit,campusId
@@ -629,7 +620,7 @@ public class FoodController {
 				paramMap.put("limit", limit);
 			}
 
-			List<ShortFood> foodlist = foodService.getFoodListWelcome(paramMap);
+			List<ShortGood> foodlist = foodService.getFoodListWelcome(paramMap);
 			map.put(Constants.STATUS, Constants.SUCCESS);
 			map.put(Constants.MESSAGE, "获取数据成功！");
 			map.put("foods", foodlist);
@@ -664,7 +655,7 @@ public class FoodController {
 				paramMap.put("limit", limit);
 			}
 
-			List<ShortFood> foodlist = foodService.getFoodListFresh(paramMap);
+			List<ShortGood> foodlist = foodService.getFoodListFresh(paramMap);
 			map.put(Constants.STATUS, Constants.SUCCESS);
 			map.put(Constants.MESSAGE, "获取数据成功！");
 			map.put("foods", foodlist);
@@ -697,7 +688,7 @@ public class FoodController {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		try {
-			FoodCategory foodCategory = new FoodCategory();
+			GoodCategory foodCategory = new GoodCategory();
 			foodCategory.setCategoryId(categoryId);
 			foodCategory.setCategory(categoryName);
 			foodCategory.setTag((short) 1);
@@ -711,7 +702,7 @@ public class FoodController {
 			int flag = 0;
 			if (categoryId != null) {
 				// 查询是否已存在该分类
-				FoodCategory foodCategory2 = foodService
+				GoodCategory foodCategory2 = foodService
 						.selectCategoryByPrimaryKey(paramMap);
 				if (foodCategory2 == null) {
 					flag = foodService.insertCategorySelective(foodCategory);
@@ -788,7 +779,7 @@ public class FoodController {
 	 * flag=foodService.updateCategoryByPrimaryKeySelective(foodCategory);
 	 * //存在即更新
 	 * 
-	 * //删除原来的食品分类的图片
+	 * //删除原来的商品分类的图片
 	 * if(foodCategory2.getImgUrl()!=null&&foodCategory.getImgUrl()!=null){
 	 * String[] temp=foodCategory2.getImgUrl().split("/");
 	 * 
@@ -807,7 +798,7 @@ public class FoodController {
 	 */
 
 	/**
-	 * 删除食品分类
+	 * 删除商品分类
 	 * 
 	 * @param categoryIds
 	 * @return
@@ -851,7 +842,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 在pc端添加食品
+	 * 在pc端添加商品
 	 * 
 	 * @param myfile
 	 * @param request
@@ -861,17 +852,17 @@ public class FoodController {
 	public String updateFoods(@RequestParam MultipartFile[] myfile,
 			HttpServletRequest request) {
 		try {
-			Long foodId = Long.valueOf(request.getParameter("foodId")); // 获取食品id
+			Long foodId = Long.valueOf(request.getParameter("foodId")); // 获取商品id
 			Float price = Float.valueOf(request.getParameter("price")); // 获取价格
-			String name = request.getParameter("foodName"); // 获取食品名称
+			String name = request.getParameter("foodName"); // 获取商品名称
 			Float discountPrice = Float.valueOf(request
 					.getParameter("discountPrice")); // 获取折扣价
-			Short status = Short.valueOf(request.getParameter("status")); // 获取食品上架下架状态
+			Short status = Short.valueOf(request.getParameter("status")); // 获取商品上架下架状态
 			Short isDiscount = Short.valueOf(request
 					.getParameter("is_discount")); // 是否打折
 			Short isFullDiscount = Short.valueOf(request
 					.getParameter("isFullDiscount")); // 是否参加满减
-			String foodFlag = request.getParameter("foodTag"); // 食品标签
+			String foodFlag = request.getParameter("foodTag"); // 商品标签
 			Integer categoryId = Integer.valueOf(request
 					.getParameter("parentId")); // 获取分类Id
 			Float primeCost = null;
@@ -879,7 +870,7 @@ public class FoodController {
 			String message = request.getParameter("message");
 			System.out.println(message);
 			String temp1 = request.getParameter("primeCost"); // 获取成本价
-			String temp2 = request.getParameter("foodCount"); // 获取食品数量
+			String temp2 = request.getParameter("foodCount"); // 获取商品数量
 			Integer campusId = Integer
 					.valueOf(request.getParameter("campusId")); // 获取校区
 			if (temp1 != null && !temp1.trim().equals("")) {
@@ -913,7 +904,7 @@ public class FoodController {
 					}
 				}
 			}
-			Food food = new Food(campusId, foodId, name, price, discountPrice,
+			Good food = new Good(campusId, foodId, name, price, discountPrice,
 					imageUrl.get(0), null, status, foodFlag, isDiscount,
 					categoryId, primeCost);
 			food.setMessage(message);
@@ -922,7 +913,7 @@ public class FoodController {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("campusId", campusId);
 			paramMap.put("foodId", foodId);
-			Food orignFood = foodService.selectFoodByPrimaryKey(paramMap); // 查看该食品是否存在
+			Good orignFood = foodService.selectFoodByPrimaryKey(paramMap); // 查看该商品是否存在
 			int flag = 0;
 			if (orignFood == null) {
 				// 不存在即添加
@@ -932,7 +923,7 @@ public class FoodController {
 				// 存在即更新
 				flag = foodService.updateFoodByPrimaryKeySelective(food);
 
-				// 删除原食品主图片
+				// 删除原商品主图片
 				if (food.getImgUrl() != null && orignFood.getImgUrl() != null) {
 					String[] temp = orignFood.getImgUrl().split("/");
 					String imageName = temp[(temp.length - 1)];
@@ -958,7 +949,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 添加新食品 弃用
+	 * 添加新商品 弃用
 	 * 
 	 * @param foodId
 	 *            ,request
@@ -995,13 +986,13 @@ public class FoodController {
 	 * food.setSaleNumber(Long.valueOf("0"));
 	 * if((foodService.selectFoodByPrimaryKey(foodId))!=null){
 	 * map.put(Constants.STATUS, Constants.FAILURE); map.put(Constants.MESSAGE,
-	 * "食品id重复,请更换食品id并做好记录"); return map; }else{
+	 * "商品id重复,请更换商品id并做好记录"); return map; }else{
 	 * if(foodService.insertFoodSelective(food)!=-1){ map.put(Constants.STATUS,
-	 * Constants.SUCCESS); map.put(Constants.MESSAGE, "添加食品成功"); }else{
+	 * Constants.SUCCESS); map.put(Constants.MESSAGE, "添加商品成功"); }else{
 	 * map.put(Constants.STATUS, Constants.FAILURE); map.put(Constants.MESSAGE,
-	 * "添加食品失败"); } } }catch(Exception exception){ exception.getStackTrace();
+	 * "添加商品失败"); } } }catch(Exception exception){ exception.getStackTrace();
 	 * map.put(Constants.STATUS, Constants.FAILURE); map.put(Constants.MESSAGE,
-	 * "添加食品失败"); } return map; }
+	 * "添加商品失败"); } return map; }
 	 */
 
 	/*
@@ -1048,7 +1039,7 @@ public class FoodController {
 			boolean isDelete3) {
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		// 一次性更新多个食品口味的数量或者名字
+		// 一次性更新多个商品口味的数量或者名字
 		String[] specialIds = { speicalId1, speicalId2, specialId3 };
 		String[] specialNames = { specialName1, specialName2, specialName3 };
 		Integer[] specialCounts = { specialCount1, specialCount2, specialCount3 };
@@ -1057,7 +1048,7 @@ public class FoodController {
 		try {
 			for (int i = 0; i < 3; i++) {
 				if (specialIds[i] != null && !specialIds[i].equals("")) {
-					FoodSpecial foodSpecial = new FoodSpecial(campusId, foodId,
+					GoodSpecial foodSpecial = new GoodSpecial(campusId, foodId,
 							specialNames[i], specialCounts[i]);
 					foodSpecial.setSpecialId(Integer.valueOf(specialIds[i]));
 					if (isDeletes[i]) {
@@ -1098,7 +1089,7 @@ public class FoodController {
 				paramMap.put("offset", (page - 1) * limit);
 			}
 			paramMap.put("campusId", campusId);
-			List<VeryShortFood> shortFood = foodService
+			List<VeryShortGood> shortFood = foodService
 					.selectHomeFood(paramMap);
 
 			map.put("food", shortFood);
@@ -1167,7 +1158,7 @@ public class FoodController {
 				paramMap.put("offset", (page - 1) * limit);
 			}
 			paramMap.put("campusId", campusId);
-			List<FoodCategory> foodCategories = new ArrayList<FoodCategory>();
+			List<GoodCategory> foodCategories = new ArrayList<GoodCategory>();
 			foodCategories = foodService.getAllFoodCategories(paramMap);
 			map.put("total", foodService.getAllCategoryCount());
 			map.put("rows", foodCategories);
@@ -1179,7 +1170,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 上传首页推荐食品图片（大图）
+	 * 上传首页推荐商品图片（大图）
 	 * 
 	 * @param foodId
 	 * @param homeImage
@@ -1246,7 +1237,7 @@ public class FoodController {
 	}
 
 	/**
-	 * 更新食品详情图片
+	 * 更新商品详情图片
 	 * 
 	 * @param detailImageFile1
 	 * @param detailImageFile2
@@ -1322,18 +1313,16 @@ public class FoodController {
 	}
 
 	/**
-	 * 返回JSON数组类型的食品分类，用于客户端分页
+	 * 返回JSON数组类型的分类，用于客户端分页
 	 * 
 	 * @param campusId
 	 * @return
 	 */
 	@RequestMapping("getAllFoodCategories4Client")
 	public @ResponseBody
-	JSONArray getAllFoodCategories4Client(@RequestParam Long campusId) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("campusId", campusId);
+	JSONArray getAllFoodCategories4Client() {
 
-		List<FoodCategory> foodCategories = foodService
+		List<GoodCategory> foodCategories = foodService
 				.getAllFoodCategories(paramMap);
 
 		return (JSONArray) JSON.toJSON(foodCategories);
@@ -1420,7 +1409,7 @@ public class FoodController {
 
 		requestMap.put("campusId", campusId);
 		requestMap.put("foodId", foodId);
-		Food thisFood = foodService.selectFoodByPrimaryKey(requestMap);
+		Good thisFood = foodService.selectFoodByPrimaryKey(requestMap);
 		requestMap.put("foodCount", thisFood.getFoodCount() + addCount);
 		Integer result = foodService.addFoodCountById(requestMap);
 		if (result != 0 && result != -1) {

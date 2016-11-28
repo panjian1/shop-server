@@ -8,13 +8,21 @@
 	<name>foryou</name>
 	<url>http://mvnrepository.com</url>
 	<repositories>
-		<repository>
+		<!--<repository>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 			<id>central</id>
 			<name>bintray</name>
 			<url>http://jcenter.bintray.com</url>
+		</repository>-->
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>mavencenter</id>
+			<name>mavencenter1</name>
+			<url>http://mvnrepository.com/</url>
 		</repository>
 	</repositories>
 
@@ -144,7 +152,16 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.1.26</version>
-		</dependency>	
+		</dependency>
+
+
+		<!-- Lean Cloud -->
+		<dependency>
+			<groupId>cn.leancloud</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>0.1.6</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>foryou</finalName>

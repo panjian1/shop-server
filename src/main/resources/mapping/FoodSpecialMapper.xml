@@ -3,7 +3,7 @@
 <mapper namespace="com.changyu.foryou.mapper.FoodSpecialMapper">
 <!-- 失效 -->
  <!-- <cache eviction="LRU" flushInterval="60000" size="512" readOnly="true" /> -->
-	<resultMap id="BaseResultMap" type="com.changyu.foryou.model.FoodSpecial">
+	<resultMap id="BaseResultMap" type="com.changyu.foryou.model.GoodSpecial">
 		<id column="food_id" property="foodId" jdbcType="BIGINT" />
 		<id column="special_id" property="specialId" jdbcType="INTEGER" />
 		<id column="campus_id" property="campusId" jdbcType="INTEGER"/>
@@ -27,14 +27,14 @@
 		where food_id = #{foodId,jdbcType=BIGINT} and campus_id=#{campusId,jdbcType=INTEGER}
 		and special_id = #{specialId,jdbcType=INTEGER}
 	</update>
-	<insert id="insert" parameterType="com.changyu.foryou.model.FoodSpecial">
+	<insert id="insert" parameterType="com.changyu.foryou.model.GoodSpecial">
 		insert into food_special (food_id, campus_id,special_id, name,tag
 		food_count)
 		values (#{foodId,jdbcType=BIGINT},#{campusId,jdbcType=INTEGER},#{specialId,jdbcType=INTEGER},
 		#{name,jdbcType=VARCHAR},
 		#{foodCount,jdbcType=INTEGER},1)
 	</insert>
-	<insert id="insertSelective" parameterType="com.changyu.foryou.model.FoodSpecial">
+	<insert id="insertSelective" parameterType="com.changyu.foryou.model.GoodSpecial">
 		insert into food_special
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="foodId != null">
@@ -73,7 +73,7 @@
 			1
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.changyu.foryou.model.FoodSpecial">
+	<update id="updateByPrimaryKeySelective" parameterType="com.changyu.foryou.model.GoodSpecial">
 		update food_special
 		<set>
 			<if test="name != null">
@@ -86,7 +86,7 @@
 		where food_id = #{foodId,jdbcType=BIGINT}
 		and special_id = #{specialId,jdbcType=INTEGER} and campus_id=#{campusId,jdbcType=INTEGER}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.changyu.foryou.model.FoodSpecial">
+	<update id="updateByPrimaryKey" parameterType="com.changyu.foryou.model.GoodSpecial">
 		update food_special
 		set name = #{name,jdbcType=VARCHAR},
 		food_count = #{foodCount,jdbcType=INTEGER}
@@ -133,7 +133,7 @@
 	</select>
 	
 	<!-- 添加口味 -->
-	<insert id="addFoodSpecial" parameterType="com.changyu.foryou.model.FoodSpecial">
+	<insert id="addFoodSpecial" parameterType="com.changyu.foryou.model.GoodSpecial">
 		insert into food_special (food_id, campus_id,special_id, name,
 		food_count,tag)
 		values (#{foodId,jdbcType=BIGINT}, #{campusId,jdbcType=INTEGER},
